@@ -12,7 +12,7 @@ router.get("/google/callback",passport.authenticate('google', {
     failureRedirect: '/app/fail',
 }),
 (req, res)=>{
-    const aToken  = jwt.sign({id:user._id},process.env.SECRET_KEY,{expiresIn:"1d"});
+    const aToken  = jwt.sign({id:req.user._id},process.env.SECRET_KEY,{expiresIn:"1d"});
 	res.cookie("aToken",aToken,{httpOnly:true});
     res.json({
         message:"Authenticated!"
