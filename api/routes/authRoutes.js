@@ -22,18 +22,7 @@ router.get('/google/callback',passport.authenticate('google', {
 router.get('/google/user',(req,res)=>{
     const aToken = jwt.sign({id:req.session.google_user._id},process.env.SECRET_KEY,{expiresIn:'1d'});
     res.cookie('aToken',aToken,{httpOnly:true});
-    req.session.destroy((error)=>{
-        if(error){
-            res.status(500).json({
-                error:error
-            });
-        }
-        else{
-            res.json({
-                message:'Authenticated!'
-            });
-        }
-    });               
+    req.session.google_user = null;       
 })
 
 //route for email signup
