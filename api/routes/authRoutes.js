@@ -2,27 +2,26 @@ const authController = require("../controllers/authController");
 const passport = require("passport");
 const express = require("express");
 const jwt = require("jsonwebtoken");
+const session = require("express-session");
 const router = express.Router();
 
 //routes for handling google oauth
 router.get("/google",passport.authenticate("google",{scope:["profile","email"]}));
 
 //redirecting when auth fails or succeeds
-router.get('/google/callback',passport.authenticate('google', {
-    failureRedirect: '/app/fail',
+router.get("/google/callback",passport.authenticate('google', {
+    failureRedirect: '/app/fail'
 }),
 (req, res)=>{
     req.session.google_user = req.user;
-    res.json({
-    	message:'Google user logged in!'
-    });
+    res.redirect("/auth/google/user");
 });
 
 //route for sending google oauth user details to frontend
-router.get('/google/user',(req,res)=>{
-    const aToken = jwt.sign({id:req.session.google_user._id},process.env.SECRET_KEY,{expiresIn:'1d'});
-    res.cookie('aToken',aToken,{httpOnly:true});
-    req.session.google_user = null;       
+router.get("/google/user",(req,res)=>{
+    const aToken = jwt.sign({id:req.session.google_user._id},process.env.SECRET_KEY,{expiresIn:"1d"});
+    res.cookie("aToken",aToken,{httpOnly:true});
+    res.json(req.session.google_user);            
 })
 
 //route for email signup
