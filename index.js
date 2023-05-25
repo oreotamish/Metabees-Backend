@@ -1,11 +1,9 @@
 //global variables
 const express = require('express')
 require('dotenv').config()
-const cors = require('cors')
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const session = require('express-session')
-const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const app = express()
@@ -22,12 +20,7 @@ mongoose
     console.error(err)
   })
 
-//requiring the controllers and routes
-const authController = require('./api/controllers/authController')
-const authRoutes = require('./api/routes/authRoutes')
-
-//middleware + implementing router
-
+//middleware to be used for the web application
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(
@@ -39,12 +32,14 @@ app.use(
 )
 app.use(passport.initialize())
 app.use(passport.session())
-app.use(cors({ credentials: true, origin: true }))
-app.use(cookieParser())
 app.use(morgan('dev'))
 
 //requiring Passport.js configuration & dotenv
 require('./api/config/passportConfig')
+
+//requiring the controllers and routes
+const authController = require('./api/controllers/authController')
+const authRoutes = require('./api/routes/authRoutes')
 
 //merging routes with routers
 app.use('/auth', authRoutes)

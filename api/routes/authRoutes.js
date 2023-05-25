@@ -2,6 +2,7 @@ const authController = require('../controllers/authController')
 const passport = require('passport')
 const express = require('express')
 const jwt = require('jsonwebtoken')
+const session = require('express-session')
 const router = express.Router()
 
 //routes for handling google oauth
@@ -17,17 +18,8 @@ router.get(
     failureRedirect: '/app/fail',
   }),
   (req, res) => {
-    console.log(res.data)
-    // console.log(req)
     req.session.google_user = req.user
-    // res.json({
-    //   message: 'Google user logged in!',
-    // })
-    const aToken = jwt.sign({ id: res.user.email }, process.env.SECRET_KEY, {
-      expiresIn: '1d',
-    })
-    res.cookie('aToken', aToken, { domain: 'localhost' })
-    res.redirect('http://localhost:3000/')
+    res.redirect('/auth/google/user')
   }
 )
 
@@ -39,7 +31,7 @@ router.get('/google/user', (req, res) => {
     { expiresIn: '1d' }
   )
   res.cookie('aToken', aToken, { httpOnly: true })
-  req.session.google_user = null
+  res.json(req.session.google_user)
 })
 
 //route for email signup
