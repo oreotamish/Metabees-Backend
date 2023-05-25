@@ -8,16 +8,33 @@ const router = express.Router();
 router.get("/google",passport.authenticate("google",{scope:["profile","email"]}));
 
 //redirecting when auth fails or succeeds
-router.get("/google/callback",passport.authenticate('google', {
+router.get('/google/callback',passport.authenticate('google', {
     failureRedirect: '/app/fail',
 }),
 (req, res)=>{
-    const aToken  = jwt.sign({id:req.user._id},process.env.SECRET_KEY,{expiresIn:"1d"});
-	res.cookie("aToken",aToken,{httpOnly:true});
+    req.session.google_user = req.user;
     res.json({
-        message:"Authenticated!"
+    	message:'Google user logged in!'
     });
 });
+
+//route for sending google oauth user details to frontend
+router.get('/google/user',(req,res)=>{
+    const aToken = jwt.sign({id:req.session.google_user._id},process.env.SECRET_KEY,{expiresIn:'1d'});
+    res.cookie('aToken',aToken,{httpOnly:true});
+    req.session.destroy((error)=>{
+        if(error){
+            res.status(500).json({
+                error:error
+            });
+        }
+        else{
+            res.json({
+                message:'Authenticated!'
+            });
+        }
+    });               
+})
 
 //route for email signup
 router.post("/signup",authController.signup);
