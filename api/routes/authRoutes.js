@@ -30,8 +30,8 @@ router.get('/google/user', (req, res) => {
     process.env.SECRET_KEY,
     { expiresIn: '1d' }
   )
-  res.cookie('aToken', aToken, { httpOnly: true })
-  res.json(req.session.google_user)
+  res.cookie('aToken', aToken, { domain: 'localhost' })
+  res.redirect('http://localhost:3001/')
 })
 
 //route for email signup

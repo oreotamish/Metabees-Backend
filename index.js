@@ -7,7 +7,8 @@ const session = require('express-session')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const app = express()
-const port = 4000
+const port = 3000
+const cors = require('cors')
 
 //setting up sample mongoose database
 mongoose.set('strictQuery', true)
@@ -33,6 +34,7 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 app.use(morgan('dev'))
+app.use(cors({ credentials: true, origin: true }))
 
 //requiring Passport.js configuration & dotenv
 require('./api/config/passportConfig')
