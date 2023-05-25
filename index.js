@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser')
 const mongoose = require('mongoose')
 const passport = require('passport')
 const app = express()
-const port = 3000
+const port = 4000
 
 //setting up sample mongoose database
 mongoose.set('strictQuery', true)
