@@ -64,7 +64,7 @@ app.get('/logout', authController.logout)
 //failure route for Google OAuth
 app.get('/app/fail', (req, res) => {
   res.status(500).json({
-    message: 'Google OAuth failed!',
+    message: 'Google oAuth failed!',
   })
 })
 
