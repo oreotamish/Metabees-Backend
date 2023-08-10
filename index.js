@@ -68,6 +68,23 @@ app.get('/app/fail', (req, res) => {
   })
 })
 
+//pre signup user
+const PreSignupUser = require('./api/models/preSignupUserModel')
+app.post('/waitlist',async (req,res) => {
+  const newUser = new PreSignupUser({
+    email:req.body.email,
+    fullname:req.body.fullname
+  })
+
+  //save the new pre signup user
+  newUser.save().then(() => {
+    res.json({
+      message:'New Pre Signup User added!'
+    })
+  })
+})
+
+//starting the server
 app.listen(port, () => {
   console.log('Server started on port', port)
 })
