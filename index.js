@@ -70,16 +70,17 @@ app.get('/app/fail', (req, res) => {
 
 //pre signup user
 const PreSignupUser = require('./api/models/preSignupUserModel')
-app.post('/waitlist',async (req,res) => {
+app.post('/waitlist', async (req, res) => {
+  console.log(req.body)
   const newUser = new PreSignupUser({
-    email:req.body.email,
-    fullname:req.body.fullname
+    email: req.body.email,
+    name: req.body.name,
   })
 
   //save the new pre signup user
   newUser.save().then(() => {
     res.json({
-      message:'New Pre Signup User added!'
+      message: 'New Pre Signup User added!',
     })
   })
 })
